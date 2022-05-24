@@ -28,14 +28,14 @@
   то подтянет из него структуру папок базы данных.
   Шаблон структуры:
 
- `const path = require('path');
+ <sup>const path = require('path');
 
   module.exports = {
  'config': path.resolve('config', 'config.json'),
  'models-path': path.resolve('db', 'models'),
  'seeders-path': path.resolve('db', 'seeders'),
  'migrations-path': path.resolve('db', 'migrations')
- };`
+ };</sup>
 
   `sequelize init:config`                       Initializes configuration
 
