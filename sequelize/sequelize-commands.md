@@ -25,7 +25,12 @@ sequelize <command>
   sequelize seed:create                       Generates a new seed file
 
 Опции:
-  --version  Показать номер версии                                                                                                                                     [булевый тип]
-  --help     Показать помощь                                                                                                                                           [булевый тип]
+--version Показать номер версии                                                                                                                       --help  Показать помощь                                                                                                                      
 
-Please specify a command
+
+
+
+
+npx sequelize-cli model:generate --name User --attributes user_name:string,age:integer  - создание модели и соответствующей миграции.
+Где User пример имени модели(указывается в единственном числе), user_name пример атрибута(столбца в таблице):string типданных sequelize(см. файл DataType). атрибуты перечисляются через запятую. Ptimal key id, creatAt, updateAt создадудся автоматически.
+
