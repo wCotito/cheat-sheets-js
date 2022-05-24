@@ -1,3 +1,5 @@
+Слева тип данных в sequelize справа чему он соответствует в самом postgres`e
+
 # Strings
 
 `DataTypes.STRING`             // VARCHAR(255)
