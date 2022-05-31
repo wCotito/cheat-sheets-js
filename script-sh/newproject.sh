@@ -8,11 +8,9 @@
 # 3) Профит! Теперь файл можно запускить в корне любого проекта введя ./newproject.sh в консоли.
 
 npm init -y
+npm i -D eslint eslint-config-airbnb-base eslint-plugin-import
 # npm i -D jest #раскоментить если нужен jest
-npm i -D eslint
 # npm i -D eslint-plugin-jest  #раскоментить если нужен jest
-npm i -D eslint-config-airbnb-base
-npm i -D eslint-plugin-import
 npx gitignore node
 
 
