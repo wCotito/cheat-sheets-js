@@ -15,7 +15,7 @@
 # P.S. В дальнейшем файл не нужно каждый раз инициализировать, достаточно просто кинуть в корень проекта и запустить.
 # 3) Профит! Теперь файл можно запускить в корне любого проекта введя ./start-server-express.sh в консоли.
 
-npm i -D sequelize pg pg-hstore sequelize-cli
+npm i  sequelize pg pg-hstore sequelize-cli
 npm i  dotenv
 npm i  express
 npm i  hbs
@@ -117,4 +117,33 @@ app.use(express.json()); // парсинг post запросов в json.
 // ! если не подключали .env то замените на цифры(например по умолчанию 3000)
 app.listen(PORT, () => {
   console.log(\`Сервер запущен на порте \${PORT}! \`);
-});" > app.js # <=== название файла можно сменить на то которое вам нужно.
+});" > app_release.js # <=== название файла можно сменить на то которое вам нужно.
+
+
+echo '<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  {{{body}}}
+</body>
+</html>' > views/layout.hbs
+
+mkdir -p views/partials 
+
+echo '<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  {{{body}}}
+</body>
+</html>' > views/layout.hbs

@@ -20,14 +20,7 @@ npx sequelize-cli model:generate --name User --attributes firstName:string,lastN
 
 3. После того, как первая миграция создана, ее надо накатить
 npx sequelize-cli db:migrate
-
-Чтобы откатить миграции
-npx sequelize-cli db:migrate:undo
-
-Модели и миграции таблиц должны быть одинаковыми
-
-4.  Чтобы сделать ссылку по ключам, необходимо в миграциях у поля с внешним ключем прописать
-
+https://github.com/wCotito/cheat-sheets-js
 references: {
   model: 'Users' // во множественном числе
   key: 'id'

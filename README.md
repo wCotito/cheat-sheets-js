@@ -27,4 +27,4 @@ P.S. В дальнейшем файл не нужно каждый раз ини
 
 # Список измененией
 
-* 31-05-22 - Добавлен скрипт запуска express сервере. Все инструкции [внутри](https://github.com/wCotito/cheat-sheets-js/blob/b8fefded6b6d8f9b3f78253197766cb4f733bace/script-sh/start-server-express.sh). 
+* 31-05-22 - Добавлен скрипт запуска express сервера. Все инструкции [внутри](https://github.com/wCotito/cheat-sheets-js/blob/b8fefded6b6d8f9b3f78253197766cb4f733bace/script-sh/start-server-express.sh). 
