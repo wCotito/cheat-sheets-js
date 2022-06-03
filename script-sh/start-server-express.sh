@@ -147,3 +147,16 @@ echo '<!DOCTYPE html>
   {{{body}}}
 </body>
 </html>' > views/layout.hbs
+
+mkdir -p public/js
+mkdir -p public/js
+mkdir -p public/images
+mkdir -p routes
+mkdir -p middlewares
+
+
+
+
+echo 'console.log("здесь клиентский скрипт");' > public/js/application.js
+echo 'console.log("здесь middlewares");' > middlewares/common.js
+
