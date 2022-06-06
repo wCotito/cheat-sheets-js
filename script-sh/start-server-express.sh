@@ -52,12 +52,7 @@ echo '{
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+  "test": { {{> footer}}
   },
   "production": {
     "username": "root",
@@ -104,6 +99,7 @@ dbCheck(); // вызов функции проверки соединения с
 app.set('view engine', 'hbs'); // настройка отрисовщика, в данный момент это HBS
 // app.set('views', path.join(__dirname, 'views')); // раскоментить если не используются partials
 hbs.registerPartials(\`\${__dirname}/views/partials\`); // закоментить если не используются partials
+app.use(express.static(path.join(__dirname, 'public'))); // подключение  public директории
 
 app.use(morgan('dev')); // добавление настроек и инициализация morgan
 
