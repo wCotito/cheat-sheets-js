@@ -20,7 +20,14 @@ npm i  dotenv
 npm i  express
 npm i  hbs
 npm i  morgan
-npm i  nodemon
+npm i -D nodemon
+
+# * Для сессий
+npm i express-session
+npm i session-file-store
+
+# * для шифровки паролей и т.д.
+npm i bcrypt
 
 npm audit fix
 
@@ -39,7 +46,7 @@ npx sequelize init # инициализация sequelize.
 
 # * Создает файл .env с данными порта подключения к серверу и данными для созднания и подключения к БД
 echo 'PORT=3000
-DB_URL=postgres://username:password@localhost:5432/dbName' > .env 
+DATABASE_URL=postgres://wcotito:123456@localhost:5432/elbrusLibra' > .env 
 # Введите данные вашей бд для
 # подключения. Где username - пользователь в вашей БД, password - пароль пользователя,
 # localhost:5432 - сервер вашей БД и порт соответственно, dbName - имя базы данных.
@@ -48,18 +55,13 @@ DB_URL=postgres://username:password@localhost:5432/dbName' > .env
 # * Создает файл config/config.json связанный с .env
 echo '{
   "development": {
-    "use_env_variable": "DB_URL",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "use_env_variable": "DATABASE_URL"
   },
-  "test": { {{> footer}}
+  "test": {
+    "use_env_variable": "DATABASE_URL"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+   "use_env_variable": "DATABASE_URL"
   }
 }'> config/config.json
 
@@ -88,6 +90,9 @@ const morgan = require('morgan'); // подключение  morgan
 const hbs = require('hbs'); // подключение  handlebars
 const path = require('path');
 
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+
 const dbCheck = require('./db/dbCheck'); // подключение скрипта проверки соединения с БД
 
 const { PORT } = process.env; // получение переменных env, в данный момент только PORT
@@ -96,9 +101,8 @@ const app = express(); // создание версии сервера express'a
 
 dbCheck(); // вызов функции проверки соединения с базоый данных
 
-app.set('view engine', 'hbs'); // настройка отрисовщика, в данный момент это HBS
-// app.set('views', path.join(__dirname, 'views')); // раскоментить если не используются partials
-hbs.registerPartials(\`\${__dirname}/views/partials\`); // закоментить если не используются partials
+app.set('view engine', 'hbs'); // настройка отрисовщика
+hbs.registerPartials(\`\${__dirname}/views/partials\`); 
 app.use(express.static(path.join(__dirname, 'public'))); // подключение  public директории
 
 app.use(morgan('dev')); // добавление настроек и инициализация morgan
@@ -115,20 +119,6 @@ app.listen(PORT, () => {
   console.log(\`Сервер запущен на порте \${PORT}! \`);
 });" > app_release.js # <=== название файла можно сменить на то которое вам нужно.
 
-
-echo '<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  {{{body}}}
-</body>
-</html>' > views/layout.hbs
-
 mkdir -p views/partials 
 
 echo '<!DOCTYPE html>
@@ -144,7 +134,7 @@ echo '<!DOCTYPE html>
 </body>
 </html>' > views/layout.hbs
 
-mkdir -p public/js
+
 mkdir -p public/js
 mkdir -p public/images
 mkdir -p routes
