@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# * При запуске данного скрипта будет создан сервер на expres,
-# * база данных к нему на postgres.
+# * При запуске данного скрипта будет создано приложение React с дефолтными настройками, 
+# * сервер на express, а так же база данных к нему на postgres.
 
 # ! Перед тем как запустить скрипт поменяйте в нем данные подключения к БД!!
 # ! И её название!!
 
-
+# ? Если каккая то настройка не нужна, просто закоментируйте её
 
 # Для того что бы все сработало:
 # 1) Сохраняете себе этот файл и кидаете его в корень нового проекта.
@@ -15,19 +15,61 @@
 # P.S. В дальнейшем файл не нужно каждый раз инициализировать, достаточно просто кинуть в корень проекта и запустить.
 # 3) Профит! Теперь файл можно запускить в корне любого проекта введя ./start-server-express.sh в консоли.
 
+
+# * создает приложение реакт
+npx create-react-app client
+
+# * создание папки сервера и переход в него
+mkdir -p server
+cd server
+
+# ? Далее идет блок создания и настройки сервера
+
+npm init -y
+
+# * Подключение и настройка eslint'та если нужно
+npm i -D eslint eslint-config-airbnb-base eslint-plugin-import
+
+echo 'module.exports = {
+  env: {
+    browser: true, // раскоментить если нужнен еслинт под браузер
+    commonjs: true,
+    es2021: true,
+    node: true,
+    //jest: true,   //раскоментить если использется jest
+  },
+  extends: [
+    "'"airbnb-base"'",
+  ],
+  parserOptions: {
+    ecmaVersion: "'"latest"'",
+  },
+  plugins: [
+    ///"'"jest"'",  //раскоментить если использется jest
+  ],
+  rules: {
+  },
+};' > .eslintrc.js
+
+# * Добавление гитигнора
+npx gitignore node
+
+
 npm i  sequelize pg pg-hstore sequelize-cli
 npm i  dotenv
 npm i  express
-npm i  hbs
 npm i  morgan
 npm i -D nodemon
 
-# * Для сессий
+# * Для сессий 
 npm i express-session
 npm i session-file-store
 
 # * для шифровки паролей и т.д.
 npm i bcrypt
+
+# * cors - для подключения клиента и сервера
+npm i cors
 
 npm audit fix
 
@@ -45,8 +87,10 @@ module.exports = {
 npx sequelize init # инициализация sequelize.
 
 # * Создает файл .env с данными порта подключения к серверу и данными для созднания и подключения к БД
-echo 'PORT=3000
-DATABASE_URL=postgres://username:password@localhost:5432/dbName' > .env 
+echo 'PORT=3100
+DATABASE_URL=postgres://username:password@localhost:5432/dbName
+COOKIE_NAME=ssid
+SESSION_SEED=12345' > .env 
 # Введите данные вашей бд для
 # подключения. Где username - пользователь в вашей БД, password - пароль пользователя,
 # localhost:5432 - сервер вашей БД и порт соответственно, dbName - имя базы данных.
@@ -65,6 +109,7 @@ echo '{
   }
 }'> config/config.json
 
+# ! Если не хотите создавать БД при запуске скрипта, то закоментируйте строчку ниже.
 npx sequelize db:create #создается база данных по настройкам выше
 
 
@@ -87,7 +132,6 @@ echo "require('dotenv').config(); // подключение переменных
 
 const express = require('express'); // подключение  express
 const morgan = require('morgan'); // подключение  morgan
-const hbs = require('hbs'); // подключение  handlebars
 const path = require('path');
 
 const session = require('express-session');
@@ -101,12 +145,9 @@ const app = express(); // создание версии сервера express'a
 
 dbCheck(); // вызов функции проверки соединения с базоый данных
 
-app.set('view engine', 'hbs'); // настройка отрисовщика
-hbs.registerPartials(\`\${__dirname}/views/partials\`); 
-app.use(express.static(path.join(__dirname, 'public'))); // подключение  public директории
-
 app.use(morgan('dev')); // добавление настроек и инициализация morgan
 
+app.use(cors()); // подключение cors
 app.use(express.urlencoded({ extended: true })); // добавление отлова post запросов.
 app.use(express.json()); // парсинг post запросов в json.
 
@@ -117,32 +158,17 @@ app.use(express.json()); // парсинг post запросов в json.
 // ! если не подключали .env то замените на цифры(например по умолчанию 3000)
 app.listen(PORT, () => {
   console.log(\`Сервер запущен на порте \${PORT}! \`);
-});" > app_release.js # <=== название файла можно сменить на то которое вам нужно.
-
-mkdir -p views/partials 
-
-echo '<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  {{{body}}}
-</body>
-</html>' > views/layout.hbs
+});" > app.js # <=== название файла можно сменить на то которое вам нужно.
 
 
-mkdir -p public/js
-mkdir -p public/images
+
+
 mkdir -p routes
 mkdir -p middlewares
 
 
 
 
-echo 'console.log("здесь клиентский скрипт");' > public/js/application.js
+echo 'console.log("здесь первый rout");' > routes/rout.js
 echo 'console.log("здесь middlewares");' > middlewares/common.js
 
