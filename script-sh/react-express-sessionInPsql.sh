@@ -207,6 +207,7 @@ const sequelizeDC = new Sequelize(DATABASE_URL);
 dbCheck();
 
 // Создание таблицы для хранения сессий в соответствии с документацией пакета connect-pg-simple
+// ! Пред запуском файла необходимо создать БД и настроить её подключение.
 const createSessionStorePostgres = async () => {
   try {
     await sequelizeDC.query(`CREATE TABLE "session" (
@@ -229,6 +230,8 @@ const createSessionStorePostgres = async () => {
 createSessionStorePostgres();' > createSessionStorePostgres.js
 
   # Запуск файла
+  # ! Если при запуске файла произошла ощибка, проверте подключение к/наличие БД
+  # ! и послеисправления проблем запустите файл фручную из каталога сервера
   node createSessionStorePostgres.js
 
 
