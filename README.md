@@ -33,4 +33,4 @@ P.S. В дальнейшем файл не нужно каждый раз ини
 
 * 04-07-22 - Добавлен скрипт создания проекта с React + express. Все инструкции [внутри](./script-sh/react-express-sessionInFilestore.sh). 
 
-* 07-07-22 - Добавлен скрипт создания проекта с React + express с созданием и подключением таблицы БД для хранения сессий. Все инструкции [внутри](./script-sh/react-express-sessionInFilestore.sh). А так же отдельно функция для создания таблицы в БД под сессии ([смотреть](./js-functions\createSessionStorePostgres))
+* 07-07-22 - Добавлен скрипт создания проекта с React + express с созданием и подключением таблицы БД для хранения сессий. Все инструкции [внутри](./script-sh/react-express-sessionInFilestore.sh). А так же отдельно функция для создания таблицы в БД под сессии ([смотреть](./js-functions/createSessionStorePostgres))
