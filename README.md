@@ -29,4 +29,6 @@ P.S. В дальнейшем файл не нужно каждый раз ини
 
 * 31-05-22 - Добавлен скрипт запуска express сервера. Все инструкции [внутри](./script-sh/start-server-express.sh). 
 
-* 04-07-22 - Добавлен скрипт создания проекта с React + express. Все инструкции [внутри](./script-sh/react-app-plus-express.sh). 
+* 04-07-22 - Добавлен скрипт создания проекта с React + express. Все инструкции [внутри](./script-sh/react-express-sessionInFilestore.sh). 
+
+* 07-07-22 - Добавлен скрипт создания проекта с React + express с созданием и подключением таблицы БД для хранения сессий. Все инструкции [внутри](./script-sh/react-express-sessionInFilestore.sh). 

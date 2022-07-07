@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # * При запуске данного скрипта будет создано приложение React с дефолтными настройками, 
-# * сервер на express, а так же база данных к нему на postgres.
+# * сервер на express, база данных к нему на postgres, сессии в session-file-store
 
 # ! Перед тем как запустить скрипт поменяйте в нем данные подключения к БД!!
 # ! И её название!!
@@ -10,7 +10,7 @@
 
 # Для того что бы все сработало:
 # 1) Сохраняете себе этот файл и кидаете его в корень нового проекта.
-# 2) chmod +x start-server-express.sh  // файл по умолчанию не исполняемый, перед запуском выполнить эту команду в консоли где расположен файл,
+# 2) chmod +x react-express-sessionInFilestore.sh  // файл по умолчанию не исполняемый, перед запуском выполнить эту команду в консоли где расположен файл,
 # для его инициализации.
 # P.S. В дальнейшем файл не нужно каждый раз инициализировать, достаточно просто кинуть в корень проекта и запустить.
 # 3) Профит! Теперь файл можно запускить в корне любого проекта введя ./start-server-express.sh в консоли.
@@ -25,14 +25,23 @@ cd server
 
 # ? Далее идет блок создания и настройки сервера
 
-npm init -y
+# * Создание скриптов запуска сервера и его инициализация
+  echo '{
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "node app.js",
+      "dev": "nodemon app.js"
+    }
+  }' > package.json
+
+  npm init -y
 
 # * Подключение и настройка eslint'та если нужно
 npm i -D eslint eslint-config-airbnb-base eslint-plugin-import
 
 echo 'module.exports = {
   env: {
-    browser: true, // раскоментить если нужнен еслинт под браузер
+    // browser: true, // раскоментить если нужнен еслинт под браузер
     commonjs: true,
     es2021: true,
     node: true,
@@ -90,7 +99,7 @@ npx sequelize init # инициализация sequelize.
 echo 'PORT=3100
 DATABASE_URL=postgres://username:password@localhost:5432/dbName
 COOKIE_NAME=ssid
-SESSION_SEED=12345' > .env 
+SESSION_SEED=123dy45' > .env 
 # Введите данные вашей бд для
 # подключения. Где username - пользователь в вашей БД, password - пароль пользователя,
 # localhost:5432 - сервер вашей БД и порт соответственно, dbName - имя базы данных.
@@ -132,21 +141,32 @@ echo "require('dotenv').config(); // подключение переменных
 
 const express = require('express'); // подключение  express
 const morgan = require('morgan'); // подключение  morgan
-const path = require('path');
-
+const cors = require('cors');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
+const { PORT, COOKIE_NAME, SESSION_SEED } = process.env; // получение переменных env
 
-const dbCheck = require('./db/dbCheck'); // подключение скрипта проверки соединения с БД
 
-const { PORT } = process.env; // получение переменных env, в данный момент только PORT
 
 const app = express(); // создание версии сервера express'a
 
+const dbCheck = require('./db/dbCheck'); // подключение скрипта проверки соединения с БД
 dbCheck(); // вызов функции проверки соединения с базоый данных
 
-app.use(morgan('dev')); // добавление настроек и инициализация morgan
+const sessionConfig = { // создание объекта с настройками сессии
+  store: new FileStore(),
+  key: COOKIE_NAME,
+  secret: SESSION_SEED,
+  resave: false,
+  saveUninitialized: false,
+  httpOnly: true,
+  cookie: { expires: 24 * 60 * 60e3 },
+};
 
+app.use(session(sessionConfig)); // подключение сессии
+
+
+app.use(morgan('dev')); // добавление настроек и инициализация morgan
 app.use(cors()); // подключение cors
 app.use(express.urlencoded({ extended: true })); // добавление отлова post запросов.
 app.use(express.json()); // парсинг post запросов в json.
